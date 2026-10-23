@@ -4,6 +4,8 @@
 
 Весь сайт это один файл `index.html`, без сборки и зависимостей.
 
+ССЫЛКА - http://froggorbx.github.io/aa-dps-calc/
+
 ## Запуск
 
 Открой `index.html` в браузере или включи GitHub Pages: Settings → Pages → Deploy from a branch → `main` / root.
