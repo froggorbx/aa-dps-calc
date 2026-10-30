@@ -755,7 +755,7 @@ function calc(){uiRk();uiEq();
  var cel=trait==='celestial',tad=cel?0.2*B*glob*G*c:0,atk=atk0+tad,bn=B*pb*m*(m+(cel?0.2*glob*G:0))*c,bl=B*pl*m*(m+($('shal').checked?4:0)+(cel?0.2*glob*G:0))*c;
  var steady=T>0?(atk+bn+bl)/T:0,dps=steady,L=Math.max(pb>0?b1:0,pl>0?l1:0);
  window.pkOn=L>0&&T>0&&L>=T;window.pkLab=pb>0||pl>0;
-  var avgBase=steady;if(L>0&&T>0){var Wn=Math.max(L,T),nA=Math.min(20000,Math.ceil(Wn/T-1e-9)),tot=0;
+  var avgBase=steady;if(L>0&&T>0){var nA=Math.min(20000,Math.max(1,Math.ceil(L/T-1e-9))),Wn=nA*T,tot=0;
    for(var ia=0;ia<nA;ia++){var rem=Math.floor(Wn-ia*T+1e-9);tot+=atk;if(pb>0)tot+=b1>0?bn/b1*Math.min(b1,rem):bn;if(pl>0)tot+=l1>0?bl/l1*Math.min(l1,rem):bl}
    avgBase=tot/Wn}
  var sumOn=$('sumOn').checked&&!ain&&!mah,noAtk=sumOn&&$('sumNo').checked,ext=0,extP=null,xh='',AIN_K=0.449;
@@ -789,7 +789,7 @@ function calc(){uiRk();uiEq();
  if(pb>0)h+='<span><img class="ic" src="'+ICN.burn+'" alt="">Горение за цикл</span><b>'+fmt(bn)+'</b>'+(b1>0?'<span>Тик горения</span><b>'+fmt(bn/b1)+'</b>':'')+'<span>Атака : горение</span><b>'+rt(atk,bn)+'</b>';
  if(pl>0)h+='<span><img class="ic" src="'+ICN.bleed+'" alt="">Кровотечение за цикл</span><b>'+fmt(bl)+'</b>'+(l1>0?'<span>Тик кровотечения</span><b>'+fmt(bl/l1)+'</b>':'')+'<span>Атака : кровотечение</span><b>'+rt(atk,bl)+'</b>';
  if(pkOn){var st0=(atk+(pb>0?(b1>0?bn/b1*T:bn):0)+(pl>0?(l1>0?bl/l1*T:bl):0))/T;h+='<span>DPS на старте (1 стак)</span><b>'+fmt(st0)+'</b>'}
- if(L>0&&T>0)h+='<span>Окно расчёта, сек</span><b>'+q(Math.max(L,T))+'</b>';
+ if(L>0&&T>0)h+='<span>Окно расчёта, сек</span><b>'+q(Wn)+'</b>';
   if(window.pkDiff)h+='<span>Средний DPS</span><b>'+fmt(avV)+'</b><span>Пиковый DPS</span><b>'+fmt(pkV)+'</b>';
   var nm=[];function add(k,t,ic){nm.push(bdg(k,t,ic||''))}
  var gP=glob-1,mP=showMag?lea+chu+meg+ecm+rM:0,pP=showPhys?erw+nag+ecp:0,eP=rE+ece;
