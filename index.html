@@ -134,7 +134,16 @@ a.btn{text-decoration:none;display:inline-block}
 .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .modal{position:fixed;inset:0;background:rgba(5,4,20,.78);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
 .modal[hidden]{display:none}
+.mwrap{position:relative;max-width:520px;width:100%}
 .mbox{background:#1b1650;border-radius:16px;max-width:520px;width:100%;max-height:88vh;overflow:auto;padding:16px}
+.mx{position:absolute;top:-14px;right:-10px;width:42px;height:42px;border-radius:50%;border:3px solid #ffd6d6;background:radial-gradient(circle at 35% 30%,#ff6a5a,#e02020 60%,#a50d0d);box-shadow:0 3px 10px #0008;padding:0;display:grid;place-items:center;cursor:pointer;z-index:2}
+.mx svg{width:20px;height:20px}
+.mfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px}
+.mfoot .mb{display:inline-flex;align-items:center;gap:7px;font:inherit;color:#fff;border:0;border-radius:12px;padding:9px 14px;cursor:pointer}
+.mfoot .mb svg{width:18px;height:18px;flex:none}
+.mfoot .mrn{background:linear-gradient(135deg,#6a4cff,#2fd0ff)}
+.mfoot .mdl{background:linear-gradient(135deg,#a50d0d,#ff3b3b)}
+.mbox h3 input{font:inherit;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:10px;padding:4px 8px;width:100%;box-sizing:border-box}
 .mbox h3{margin:0 0 4px}.mbox h4{margin:12px 0 4px;color:var(--muted)}.mbox img.pv{width:100%;border-radius:10px}
 .card h2,h1,h2,h3,h4,.big{font-family:'Fredoka One','Trebuchet MS',sans-serif!important}
 .top .ti{display:flex;gap:3px}.top .ti img{width:18px;height:18px;object-fit:contain}
@@ -632,7 +641,7 @@ transition:--e1 .7s ease,--e2 .7s ease,--e3 .7s ease,--em .7s ease,--gl .7s ease
 
 
 <div class="dbar off" id="dbar" aria-live="polite"><span class="dl" id="dbL">Средний DPS</span><span class="dv" id="dbV">—</span></div>
-<div class="modal" id="modal" hidden><div class="mbox" id="mbox"></div></div>
+<div class="modal" id="modal" hidden><div class="mwrap"><div class="mbox" id="mbox"></div><button type="button" class="mx" id="mclose" aria-label="Закрыть" title="Закрыть"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round"/></svg></button></div></div>
 </main>
 <script>
 (function(){
@@ -992,10 +1001,18 @@ function openModal(i,K){K=K||'top';var top=LS[K].arr,u=top[i],m=$('mbox');m.inne
  var nn=el('div','names');(u.names||[]).forEach(function(p){nn.insertAdjacentHTML('beforeend',bdg(p[0],p[1]||'',p[2]||''))});m.appendChild(nn);
  var g=el('div','bk');(u.rows||[]).forEach(function(r){g.appendChild(el('span','',r[0]));g.appendChild(el('b','',conv(r[1],u.lang||'ru')))});m.appendChild(g);decorRows(g,{crit1:(u.ic||[]).indexOf('phys')>-1&&(u.ic||[]).indexOf('magic')<0?IMG.phys:IMG.magic});
  m.appendChild(el('h4','','Настройки'));var g2=el('div','bk');(u.params||[]).forEach(function(r){g2.appendChild(el('span','',r[0]));g2.appendChild(el('b','',TR(r[1])))});m.appendChild(g2);
- var b=el('div','btns'),c=el('button','btn ghost','Закрыть'),x=el('button','btn ghost','Удалить');c.type='button';x.type='button';c.onclick=closeModal;
- x.onclick=function(){top.splice(i,1);tsave(K);renderTop(K);closeModal()};b.appendChild(c);b.appendChild(x);m.appendChild(b);
+
+ var en=L==='en',b=el('div','mfoot'),rn=el('button','mb mrn'),x=el('button','mb mdl'),h3=m.querySelector('h3');rn.type='button';x.type='button';
+ rn.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21l1-5L16.5 3.5a2.1 2.1 0 013 3L7 19z" fill="#fff"/><path d="M14.5 5.5l4 4" stroke="#6a4cff" stroke-width="1.6"/></svg><span></span>';rn.lastChild.textContent=en?'Rename':'Переименовать';
+ x.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l1 2h4v2H4V5h4z" fill="#fff"/><path d="M6 9h12l-1 11a1 1 0 01-1 1H8a1 1 0 01-1-1z" fill="#fff"/><path d="M10 11v7M14 11v7" stroke="#c01818" stroke-width="1.6" stroke-linecap="round"/></svg><span></span>';x.lastChild.textContent=en?'Delete':'Удалить';
+ x.onclick=function(){top.splice(i,1);tsave(K);renderTop(K);closeModal()};
+ rn.onclick=function(){if(h3.querySelector('input'))return;var inp=el('input'),done=false;inp.type='text';inp.value=u.name;inp.maxLength=60;h3.textContent=(i+1)+'. ';h3.appendChild(inp);inp.focus();inp.select();
+  function fin(ok){if(done)return;done=true;var v=inp.value.trim();if(ok&&v){u.name=v;tsave(K);renderTop(K)}h3.textContent=(i+1)+'. '+dn(u)}
+  inp.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();fin(true)}else if(e.key==='Escape'){e.stopPropagation();fin(false)}};inp.onblur=function(){fin(true)}};
+ b.appendChild(rn);b.appendChild(x);m.appendChild(b);$('mclose').style.display='';
  applyLang(m);$('modal').hidden=false}
 function closeModal(){$('modal').hidden=true}
+$('mclose').onclick=closeModal;
 $('modal').onclick=function(e){if(e.target===$('modal'))closeModal()};
 Object.keys(LS).forEach(function(K){var c=LS[K],clr=0;
  $(c.add).onclick=function(){var nm=$(c.nm).value.trim();if(!nm){$(c.nm).focus();return}
@@ -1005,7 +1022,7 @@ Object.keys(LS).forEach(function(K){var c=LS[K],clr=0;
   if(!clr){clr=1;b.textContent=L==='en'?'Press again to clear':'Нажми ещё раз';setTimeout(function(){clr=0;b.textContent=L==='en'?(EN[c.clrT]||'Clear'):c.clrT},3000);return}
   clr=0;LS[K].arr=[];tsave(K);renderTop(K);b.textContent=L==='en'?(EN[c.clrT]||'Clear'):c.clrT};
  $(c.exp).onclick=function(){exportTop('png',K)}});
-function exportTop(type,K){K=K||'top';var top=LS[K].arr,m=$('mbox');
+function exportTop(type,K){K=K||'top';var top=LS[K].arr,m=$('mbox');$('mclose').style.display='none';
  if(!top.length){m.innerHTML='';m.appendChild(el('h3','',L==='en'?LS[K].empEn:LS[K].emp));$('modal').hidden=false;return}
  var ld=(document.fonts&&document.fonts.load)?document.fonts.load('40px "Fredoka One"'):Promise.resolve();
  Promise.all([ld,loadIcons()]).then(function(res){var IM=res[1],W=1080,N=Math.min(top.length,10),en=L==='en',F='"Fredoka One",sans-serif';
