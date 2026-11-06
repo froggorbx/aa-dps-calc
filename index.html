@@ -938,7 +938,7 @@ function calc(){uiRk();uiEq();
    xh=rw('Абилка Аинза за раз',fmt(ab1))+rw('КД абилки, сек',q(abCd))+rw('Абилка Аинза (DPS)',fmt(abD))+(lbN>0?rw('Лимит-брейки на саммонах','×'+q(LBm*LBm)):'')+rw('HP Дарк Янга',fmt(X))+rw('Удар Дарка (два числа)',fmt(d1)+' + '+fmt(d2))+rw(sr.lim?'Дарков в минуту (упор в лимит)':'Дарков в минуту',q(sr.r*60))+rw('Дарки (DPS)',fmt(dkD))}
   if(mah){var SxM=mhTy==='phys'?Sp:Sm,csM=cf(ch,mhTy==='phys'),kJ=$('kis').checked?0.9:1,u1=B*LBm*MH_C*SxM*Gs,qq=function(x){return String(Math.round(x*100)/100).replace('.',DS)};
    var runM=function(m){if(!(T>0))return {cn:[0,0],dps:0};var a=mhAtks(m,T,kJ),cn=mhSimAvg(a);return {cn:cn,dps:(cn[0]*a[0].k+cn[1]*a[1].k)*u1*csM/MH_H}},cur=runM(mhMode),dM=MH[mhMode];
-   ext=cur.dps;mhInfo(LBm,T,$('kis').checked);
+   ext=cur.dps;extP=cur.dps*(cmxq(ch,mhTy==='phys')/csM);mhInfo(LBm,T,$('kis').checked);
    xh=(lbN>0?rw('Лимит-брейки на саммонах','×'+q(LBm*LBm)):'')+rw('Режим Махораги',dM.id)+rw('Урон: '+dM.n,fmt(u1*dM.k))+rw('Урон: '+MH_J.n,fmt(u1*MH_J.k))+(ch>0?rw('Крит саммонов (средний множитель)',fx(csM)):'')
     +rw(dM.n+': каст каждые, сек',cur.cn[0]>0?q(MH_H/cur.cn[0]):'—')+rw(MH_J.n+': каст каждые, сек',cur.cn[1]>0?q(MH_H/cur.cn[1]):'—')+rw('Махорага (DPS)',fmt(cur.dps))+rw('Мегуми, своя атака (DPS)',fmt(dps+fh));
    for(var mi=0;mi<3;mi++)if(mi!==mhMode)xh+=rw('Махорага в режиме '+MH[mi].id+' (DPS)',fmt(runM(mi).dps))}
@@ -950,8 +950,8 @@ function calc(){uiRk();uiEq();
    ext=nDps+rD;extP=nDps+rDp;if(lbN>0&&(nC>0||rHp>0))xh+=rw('Лимит-брейки на саммонах','×'+q(LBm*LBm));if(ch>0&&(nC>0||rHp>0))xh+=rw('Крит саммонов (средний множитель)',fx(cs));
    if(nC>0)xh+=(mdA?rw('КД адепта (от юнита), сек',q(nK)):$('kis').checked?rw('КД адепта с Урахарой, сек',q(nK)):'')+rw('Адепты (DPS)',fmt(nDps));
    if(rHp>0)xh+=(mdR&&num($('rInt').value)>0?rw('Интервал призыва (от юнита), сек',q(rIn)):cuA2&&tAdd!==0&&num($('rInt').value)>0?rw('Интервал призыва с проклятием, сек',q(rIn)):'')+rw('HP пилигрима',fmt(RH))+rw(rX>0?'Удар пилигрима (два числа)':'Удар пилигрима',rX>0?fmt(e1)+' + '+fmt(e2):fmt(e1))+rw(rs.lim?'Пилигримов в минуту (упор в лимит)':rs.sp?'Пилигримов в минуту (упор в интервал спавна)':'Пилигримов в минуту',q(rs.r*60))+rw('Пилигримы (DPS)',fmt(rD))}
-  if(extP===null)extP=ext;var baseA=avgBase,baseP=(sumOn||ain||mah)?steady:steadyX;if(noAtk){dps=0;fh=0;baseA=0;baseP=0}
-  var avV=baseA+fh+ext,pkV=baseP+fh+extP;dps=pkFin(avV,pkV,pb>0||pl>0,L>0&&T>0);$('out').textContent=fmt(dps*CN)+SEC;curDps=dps*CN;curCN=CN;var mxOk=!(sumOn||ain||mah);window.curAv=avV*CN;window.curMx=mxOk?pkV*CN:null;
+  if(extP===null)extP=ext;var baseA=avgBase,baseP=(sumOn||ain)?steady:steadyX;if(noAtk){dps=0;fh=0;baseA=0;baseP=0}
+  var avV=baseA+fh+ext,pkV=baseP+fh+extP;dps=pkFin(avV,pkV,pb>0||pl>0,L>0&&T>0);$('out').textContent=fmt(dps*CN)+SEC;curDps=dps*CN;curCN=CN;var mxOk=!(sumOn||ain);window.curAv=avV*CN;window.curMx=mxOk?pkV*CN:null;
  var h=($('hak').checked&&ch>0?'<span>Шанс крита с Хакари</span><b>'+pf(ch)+'%</b>':'')+'<span>Общий множитель'+(kag?' (физ / маг)':'')+'</span><b>'+(kag?fx(mp)+' / '+fx(mm):fx(m))+'</b><span>Средний множитель крита'+(kag?' (физ / маг)':'')+'</span><b>'+(kag?fx(cp)+' / '+fx(cmg):fx(c))+'</b><span>Атака за цикл</span><b>'+fmt(atk)+'</b>'+(cel?'<span>Тру-урон за цикл (в атаке)</span><b>'+fmt(tad)+'</b>':'');
  if(pb>0)h+='<span><img class="ic" src="'+ICN.burn+'" alt="">Горение за цикл</span><b>'+fmt(bn)+'</b>'+(b1>0?'<span>Тик горения</span><b>'+fmt(bn/b1)+'</b>':'')+'<span>Атака : горение</span><b>'+rt(atk,bn)+'</b>';
  if(pl>0)h+='<span><img class="ic" src="'+ICN.bleed+'" alt="">Кровотечение за цикл</span><b>'+fmt(bl)+'</b>'+(l1>0?'<span>Тик кровотечения</span><b>'+fmt(bl/l1)+'</b>':'')+'<span>Атака : кровотечение</span><b>'+rt(atk,bl)+'</b>';
@@ -973,7 +973,7 @@ function calc(){uiRk();uiEq();
  if(cuOn)add('cu','','tr_curse');
  if(trait)add(TRC[trait],'','tr_'+trait+(trait==='monarch'&&mlvl===2?',tr_monarch':''));
  $('names').innerHTML=nm.length?'<span class="lab">Учтены:</span> '+nm.join(' '):'';
- if($('ruk').checked){var mxOkR=!(sumOn||ain||mah);
+ if($('ruk').checked){var mxOkR=!(sumOn||ain);
  var mR=S*G*W,up=1/3,hit=B*mR*cNorm,tk=hit/6,fz=B*mR*(mR+(cel?0.2*glob*G:0))*cNorm;
  var reg=T>0?(hit+(cel?0.2*B*glob*G*cNorm:0))/T:0,act=2*tk+(fz+tk)/3,abil=up*act;
   var hitX=B*mR*cXn,tkX=hitX/6,fzX=B*mR*(mR+(cel?0.2*glob*G:0))*cXn,regX=T>0?(hitX+(cel?0.2*B*glob*G*cXn:0))/T:0,actX=2*tkX+(fzX+tkX)/3;
