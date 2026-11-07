@@ -899,7 +899,7 @@ function calc(){uiRk();uiEq();
  var tr=trait==='monarch'?{dmg:3*mlvl,cd:.1*mlvl}:(TRT[trait]||{}),CN=trait==='monarch'?1:(Math.max(1,Math.floor(num($('ucnt').value)))||1),cuBv=num($('cuB').value)/100,cuDv=num($('cuD').value)/100,dAdd=window.EQOV?EQOV.d:(cuSw?-cuDv:cuBv),tAdd=window.EQOV?EQOV.t:(cuSw?-cuBv:cuDv),dMul=Math.max(0,1+dAdd),tMul=Math.max(0,1+tAdd),cuOn=cuBv>0||cuDv>0,cdMul=Math.max(0,1+tAdd-(tr.cd||0))*($('kis').checked?0.9:1),mg=$('mgm').checked,T=mg?20*($('kis').checked?0.9:1):num($('cd').value)*Math.max(0,1+pstc($('cSt').value))*cdMul,ch=(types['true']&&!kag)?0:(num($('crit').value)+($('hak').checked?50:0))/100,cm=num($('critm').value)||1.5;
  var lbN=Math.max(0,Math.min(6,Math.floor(num($('lb').value)))),LBm=1+0.05*lbN;
  var grfOn=$('grf').checked,grfM=grfOn?Math.pow(Math.max(0,num($('grfP').value))*1000,0.47)/6.0714:1;
- var B=num(mg?$('mDmg').value:$('dmg').value)*grfM*Math.max(0,1+pst(mg?$('mdSt').value:$('dSt').value)-(mg?pstc($('mcSt').value):0))*LBm*Math.max(0,1+dAdd+(tr.dmg||0)),pb=num($('burn').value)/100,pl=num($('bleed').value)/100;
+ var B=num(mg?$('mDmg').value:$('dmg').value)*grfM*Math.max(0,1+pst(mg?$('mdSt').value:$('dSt').value)-(mg?pstc($('mcSt').value):0))*LBm*Math.max(0,1+dAdd+(mg?-tAdd:0)+(tr.dmg||0)),pb=num($('burn').value)/100,pl=num($('bleed').value)/100;
  var glob=1+($('grif').checked?1:0)+($('idol').checked?0.15:0);
  var kag=$('kag').checked,ocm=2*cm-0.5;$('ocmv').textContent=(Math.round(ocm*100)/100).toString().replace('.',DS);
  function wkv(i){var v=num($(i).value);return v>0?v:1}
@@ -920,7 +920,7 @@ function calc(){uiRk();uiEq();
  var b1=num($('bn1').value),l1=num($('bl1').value);
  var cel=trait==='celestial',tad=cel?0.2*B*glob*G*c:0,atk=atk0+tad,bn=B*pb*m*(m+($('mrk').checked?3*glob*G:0)+(cel?0.2*glob*G:0))*c,bl=B*pl*m*(m+($('shal').checked?4:0)+(cel?0.2*glob*G:0))*c;
  var tadX=cel?0.2*B*glob*G*cXn:0,atkX=(kag?B*mp*cpX+B*mm*cmgX:B*m*cXn)+tadX,bnX=B*pb*m*(m+($('mrk').checked?3*glob*G:0)+(cel?0.2*glob*G:0))*cXn,blX=B*pl*m*(m+($('shal').checked?4:0)+(cel?0.2*glob*G:0))*cXn,steadyX=T>0?(atkX+bnX+blX)/T:0;
-  mgmUi(mg,B,m,T,dAdd,tr,lbN,LBm);var steady=T>0?(atk+bn+bl)/T:0,dps=steady,L=Math.max(pb>0?b1:0,pl>0?l1:0);
+  mgmUi(mg,B,m,T,dAdd-(mg?tAdd:0),tr,lbN,LBm);var steady=T>0?(atk+bn+bl)/T:0,dps=steady,L=Math.max(pb>0?b1:0,pl>0?l1:0);
  window.pkOn=L>0&&T>0&&L>=T;window.pkLab=pb>0||pl>0;
   var avgBase=steady;if(L>0&&T>0){var nA=Math.min(20000,Math.max(1,Math.ceil(L/T-1e-9))),Wn=nA*T,tot=0;
    for(var ia=0;ia<nA;ia++){var rem=Math.floor(Wn-ia*T+1e-9);tot+=atk;if(pb>0)tot+=b1>0?bn/b1*Math.min(b1,rem):bn;if(pl>0)tot+=l1>0?bl/l1*Math.min(l1,rem):bl}
